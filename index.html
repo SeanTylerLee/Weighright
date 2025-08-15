@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta for PWA/iOS -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0a84ff" />
+
+  <title>WeighRight • PWA</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- iOS icons / splash -->
+  <link rel="apple-touch-icon" href="icons/icon-180.png" />
+  <link rel="icon" type="image/png" href="icons/icon-192.png" />
+</head>
+<body class="app">
+  <!-- Header -->
+  <header class="app-header">
+    <h1 class="app-title">WeighRight</h1>
+    <button id="installBtn" class="btn ghost" hidden>Install</button>
+  </header>
+
+  <!-- Main -->
+  <main class="container">
+    <section class="card">
+      <h2>Welcome</h2>
+      <p class="muted">Fast, offline-first weight & axle calculator for truck drivers.</p>
+      <div class="actions">
+        <a class="btn primary" href="axlecalc.html">Open Calculator</a>
+        <a class="btn" href="settings.html">Settings</a>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>What’s inside</h3>
+      <ul class="bullets">
+        <li>Axle Adjustment Planner (tandems & 5th wheel)</li>
+        <li>Federal Bridge Formula checker</li>
+        <li>Local presets saved on device</li>
+        <li>100% works offline after first load</li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- Bottom nav -->
+  <nav class="tabbar">
+    <a class="tab active" href="index.html">Home</a>
+    <a class="tab" href="axlecalc.html">Calculator</a>
+    <a class="tab" href="settings.html">Settings</a>
+  </nav>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.hidden = false;
+    });
+    installBtn?.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      installBtn.hidden = true;
+    });
+  </script>
+</body>
+</html>
