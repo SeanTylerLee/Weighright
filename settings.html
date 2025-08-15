@@ -26,6 +26,17 @@
       <p class="muted small">Theme preference is saved on this device.</p>
     </section>
 
+    <!-- Defaults Section -->
+    <section class="card">
+      <h2>Default Caps Preset</h2>
+      <div class="actions">
+        <button class="btn" onclick="saveDefaultPreset('std80')">Standard 80k</button>
+        <button class="btn" onclick="saveDefaultPreset('std80_132')">80k w/ 13.2k steer</button>
+        <button class="btn ghost" onclick="saveDefaultPreset('custom')">Custom</button>
+      </div>
+      <p class="muted small">When you open the calculator, caps will start with this preset.</p>
+    </section>
+
     <!-- Data Section -->
     <section class="card">
       <h2>Data</h2>
@@ -63,6 +74,29 @@
         alert('Cleared.');
       }
     }
+    function saveDefaultPreset(key){
+      localStorage.setItem('wrDefaultCapsPreset', key);
+      alert('Default preset saved.');
+    }
+    // On load, if a default preset is set and no saved caps exist yet, seed them
+    (function seedFromDefaults(){
+      const havePresets = !!localStorage.getItem('axlePresets');
+      const def = localStorage.getItem('wrDefaultCapsPreset');
+      if(!havePresets && def){
+        const p = {
+          capSteer: def==='std80_132'?13200:12000,
+          capDrives: 34000,
+          capTrailer: 34000,
+          capGross: 80000,
+          lbsPerHoleTrailer: 300,
+          lbsPerHole5th: 500,
+          trailerDir: 'toTrailer',
+          fifthDir: 'toSteer',
+          bfRound: 'nearest'
+        };
+        localStorage.setItem('axlePresets', JSON.stringify(p));
+      }
+    })();
     applyTheme();
   </script>
 </body>

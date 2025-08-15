@@ -7,12 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0a84ff" />
-
   <title>WeighRight • PWA</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
-
-  <!-- iOS icons / splash -->
   <link rel="apple-touch-icon" href="icons/icon-180.png" />
   <link rel="icon" type="image/png" href="icons/icon-192.png" />
 </head>
@@ -23,7 +20,6 @@
     <button id="installBtn" class="btn ghost" hidden>Install</button>
   </header>
 
-  <!-- Main -->
   <main class="container">
     <section class="card">
       <h2>Welcome</h2>
@@ -38,9 +34,10 @@
       <h3>What’s inside</h3>
       <ul class="bullets">
         <li>Axle Adjustment Planner (tandems & 5th wheel)</li>
-        <li>Federal Bridge Formula checker</li>
+        <li>CAT Scale paste -- auto-fills readings</li>
+        <li>Federal Bridge Formula checker (ft/in support)</li>
         <li>Local presets saved on device</li>
-        <li>100% works offline after first load</li>
+        <li>Works offline after first load</li>
       </ul>
     </section>
   </main>
@@ -53,9 +50,11 @@
   </nav>
 
   <script>
+    // Service worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js');
     }
+    // Install prompt
     let deferredPrompt;
     const installBtn = document.getElementById('installBtn');
     window.addEventListener('beforeinstallprompt', (e) => {

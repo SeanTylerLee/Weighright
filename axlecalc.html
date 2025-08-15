@@ -13,111 +13,151 @@
   <header class="app-header">
     <button class="btn ghost" onclick="history.back()">Back</button>
     <h1 class="app-title">WeighRight Calculator</h1>
-    <button id="resetBtn" class="btn ghost">Reset</button>
+    <button id="resetBtn" class="btn ghost" title="Reset all saved presets">Reset</button>
   </header>
 
   <main class="container">
     <!-- Presets -->
-    <section class="card">
-      <h2>Caps & Effects</h2>
-      <div class="grid2">
-        <div>
-          <label>Legal Caps (lbs)</label>
-          <div class="grid2">
-            <input id="capSteer" type="number" inputmode="numeric" placeholder="Steer" value="12000">
-            <input id="capDrives" type="number" inputmode="numeric" placeholder="Drives" value="34000">
-          </div>
-          <div class="grid2 mt8">
-            <input id="capTrailer" type="number" inputmode="numeric" placeholder="Trailer" value="34000">
-            <input id="capGross" type="number" inputmode="numeric" placeholder="Gross" value="80000">
-          </div>
-        </div>
-        <div>
-          <label>Per-Hole Effects (lbs)</label>
-          <div class="grid2">
-            <input id="lbsPerHoleTrailer" type="number" inputmode="numeric" placeholder="Trailer tandems" value="300">
-            <input id="lbsPerHole5th" type="number" inputmode="numeric" placeholder="5th wheel" value="500">
-          </div>
-          <div class="grid2 mt8">
-            <select id="trailerDir">
-              <option value="toTrailer">Tandems BACK adds to trailer</option>
-              <option value="toDrives">Tandems BACK adds to drives</option>
-            </select>
-            <select id="fifthDir">
-              <option value="toSteer">5th FORWARD adds to steer</option>
-              <option value="toDrives">5th FORWARD adds to drives</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="actions">
-        <button id="savePresets" class="btn">Save Presets</button>
-        <span class="muted small">Saved on this device.</span>
-      </div>
-    </section>
+    <section class="card" aria-labelledby="caps-title">
+      <h2 id="caps-title">Caps & Effects</h2>
 
-    <!-- Axle Adjustment Planner -->
-    <section class="card">
-      <h2>Axle Adjustment Planner</h2>
-      <div class="grid3">
-        <div>
-          <label>Steer (current)</label>
-          <input id="steerNow" type="number" inputmode="numeric" placeholder="e.g. 11800">
-        </div>
-        <div>
-          <label>Drives (current)</label>
-          <input id="drivesNow" type="number" inputmode="numeric" placeholder="e.g. 35200">
-        </div>
-        <div>
-          <label>Trailer (current)</label>
-          <input id="trailerNow" type="number" inputmode="numeric" placeholder="e.g. 33200">
-        </div>
-      </div>
-      <div class="actions">
-        <button id="calcAdjust" class="btn primary">Plan Adjustments</button>
-        <button id="clearAdjust" class="btn ghost">Clear</button>
-        <button id="quickLegal" class="btn ghost">Quick Legal</button>
-        <button id="shareBtn" class="btn ghost">Share</button>
-      </div>
-      <pre id="adjustOut" class="result"></pre>
-    </section>
-
-    <!-- Bridge Formula -->
-    <section class="card">
-      <h2>Bridge Formula (Federal)</h2>
-      <div class="grid2">
-        <div>
-          <label>Axles in group (N)</label>
-          <input id="bfN" type="number" min="2" max="7" step="1" value="2">
-        </div>
-        <div>
-          <label>Outer spacing L (feet)</label>
-          <input id="bfL" type="number" step="0.1" placeholder="Distance between outer axles">
-        </div>
-      </div>
+      <!-- Quick caps preset -->
       <div class="grid2 mt8">
         <div>
-          <label>Rounding</label>
+          <label for="capsPreset">Quick Preset</label>
+          <select id="capsPreset">
+            <option value="custom">Custom</option>
+            <option value="std80">Standard 80k (12/34/34/80)</option>
+            <option value="std80_132">80k w/ 13.2k steer (13.2/34/34/80)</option>
+          </select>
+        </div>
+        <div>
+          <label for="bfRound">Bridge Rounding</label>
           <select id="bfRound">
             <option value="nearest" selected>Nearest 500</option>
             <option value="down">Round down 500</option>
             <option value="none">No rounding</option>
           </select>
         </div>
+      </div>
+
+      <div class="grid2 mt8">
         <div>
-          <label>Apply 80,000 gross cap?</label>
+          <label>Legal Caps (lbs)</label>
+          <div class="grid2">
+            <input id="capSteer" type="number" inputmode="numeric" placeholder="Steer" value="12000" min="0">
+            <input id="capDrives" type="number" inputmode="numeric" placeholder="Drives" value="34000" min="0">
+          </div>
+          <div class="grid2 mt8">
+            <input id="capTrailer" type="number" inputmode="numeric" placeholder="Trailer" value="34000" min="0">
+            <input id="capGross" type="number" inputmode="numeric" placeholder="Gross" value="80000" min="0">
+          </div>
+        </div>
+
+        <div>
+          <label>Per-Move Effects</label>
+          <div class="grid2">
+            <input id="lbsPerHoleTrailer" type="number" inputmode="numeric" placeholder="Trailer tandems (lbs / hole)" value="300" min="0">
+            <input id="lbsPerHole5th" type="number" inputmode="numeric" placeholder="5th wheel (lbs / hole)" value="500" min="0">
+          </div>
+          <div class="grid2 mt8">
+            <select id="trailerDir" title="Convention for moving trailer tandems BACK">
+              <option value="toTrailer">Tandems BACK adds to trailer</option>
+              <option value="toDrives">Tandems BACK adds to drives</option>
+            </select>
+            <select id="fifthDir" title="Convention for moving 5th wheel FORWARD">
+              <option value="toSteer">5th FORWARD adds to steer</option>
+              <option value="toDrives">5th FORWARD adds to drives</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="savePresets" class="btn">Save Presets</button>
+        <span class="muted small">Saved on this device.</span>
+      </div>
+    </section>
+
+    <!-- Quick import from CAT scale -->
+    <section class="card" aria-labelledby="cat-title">
+      <h2 id="cat-title">CAT Scale Paste (optional)</h2>
+      <p class="muted small">Paste text from a CAT Scale ticket or app; we’ll pull out Steer / Drives / Trailer / Gross automatically.</p>
+      <textarea id="catPaste" rows="4" placeholder="Paste CAT Scale text here (we’ll parse the numbers)"></textarea>
+      <div class="actions">
+        <button id="parseCat" class="btn">Parse Ticket</button>
+        <button id="clearCat" class="btn ghost">Clear</button>
+      </div>
+      <pre id="catOut" class="result" aria-live="polite"></pre>
+    </section>
+
+    <!-- Axle Adjustment Planner -->
+    <section class="card" aria-labelledby="plan-title">
+      <h2 id="plan-title">Axle Adjustment Planner</h2>
+      <div class="grid3">
+        <div>
+          <label for="steerNow">Steer (current)</label>
+          <input id="steerNow" type="number" inputmode="numeric" placeholder="e.g. 11800" min="0">
+        </div>
+        <div>
+          <label for="drivesNow">Drives (current)</label>
+          <input id="drivesNow" type="number" inputmode="numeric" placeholder="e.g. 35200" min="0">
+        </div>
+        <div>
+          <label for="trailerNow">Trailer (current)</label>
+          <input id="trailerNow" type="number" inputmode="numeric" placeholder="e.g. 33200" min="0">
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="calcAdjust" class="btn primary">Plan Adjustments</button>
+        <button id="clearAdjust" class="btn ghost">Clear</button>
+        <button id="quickLegal" class="btn ghost">Quick Legal</button>
+        <button id="shareBtn" class="btn ghost">Share</button>
+      </div>
+
+      <pre id="adjustOut" class="result" aria-live="polite"></pre>
+    </section>
+
+    <!-- Bridge Formula -->
+    <section class="card" aria-labelledby="bridge-title">
+      <h2 id="bridge-title">Bridge Formula (Federal)</h2>
+
+      <div class="grid2">
+        <div>
+          <label for="bfN">Axles in group (N)</label>
+          <input id="bfN" type="number" min="2" max="10" step="1" value="2">
+        </div>
+        <div>
+          <label>Outer spacing L</label>
+          <div class="grid2">
+            <input id="bfFeet" type="number" min="0" step="1" placeholder="Feet">
+            <input id="bfInches" type="number" min="0" max="11" step="1" placeholder="Inches">
+          </div>
+          <small class="muted">We’ll convert ft/in automatically.</small>
+        </div>
+      </div>
+
+      <div class="grid2 mt8">
+        <div>
+          <label for="bfGrossCap">Apply 80,000 gross cap?</label>
           <select id="bfGrossCap">
             <option value="yes" selected>Yes</option>
             <option value="no">No</option>
           </select>
         </div>
+        <div>
+          <label for="bfL">L (feet, auto)</label>
+          <input id="bfL" type="number" step="0.01" placeholder="Computed from ft/in" readonly>
+        </div>
       </div>
+
       <div class="actions">
         <button id="calcBridge" class="btn">Calculate</button>
         <button id="clearBridge" class="btn ghost">Clear</button>
       </div>
-      <pre id="bridgeOut" class="result"></pre>
-      <p class="muted small mt6">Formula: <code>F = 500 * [ (L·N)/(N-1) + 12N + 36 ]</code></p>
+      <pre id="bridgeOut" class="result" aria-live="polite"></pre>
+      <p class="muted small mt6">Formula: <code>F = 500 × [ (L·N)/(N-1) + 12N + 36 ]</code> (Federal Bridge Formula B)</p>
     </section>
   </main>
 
@@ -129,7 +169,11 @@
   </nav>
 
   <script>
+    // ---------- Helpers ----------
     const $ = id => document.getElementById(id);
+    const clampNonNeg = v => Math.max(0, Number.isFinite(+v) ? +v : 0);
+    const fmt = n => Number(n).toLocaleString();
+
     const roundToNearest500 = v => Math.round(v/500)*500;
     const roundDownTo500 = v => Math.floor(v/500)*500;
 
@@ -137,80 +181,163 @@
       const p = JSON.parse(localStorage.getItem('axlePresets')||'{}');
       const map = {
         capSteer:12000, capDrives:34000, capTrailer:34000, capGross:80000,
-        lbsPerHoleTrailer:300, lbsPerHole5th:500, trailerDir:'toTrailer', fifthDir:'toSteer'
+        lbsPerHoleTrailer:300, lbsPerHole5th:500, trailerDir:'toTrailer', fifthDir:'toSteer',
+        bfRound: 'nearest'
       };
-      for (const k in map) { if (p[k] != null) map[k]=p[k]; }
-      for (const k in map) { $(k).value = map[k]; }
+      for (const k in map) if (p[k] != null) map[k]=p[k];
+
+      $('capSteer').value = map.capSteer;
+      $('capDrives').value = map.capDrives;
+      $('capTrailer').value = map.capTrailer;
+      $('capGross').value = map.capGross;
+      $('lbsPerHoleTrailer').value = map.lbsPerHoleTrailer;
+      $('lbsPerHole5th').value = map.lbsPerHole5th;
+      $('trailerDir').value = map.trailerDir;
+      $('fifthDir').value = map.fifthDir;
+      $('bfRound').value = map.bfRound;
     }
+
     function savePresets(){
-      const keys = ['capSteer','capDrives','capTrailer','capGross','lbsPerHoleTrailer','lbsPerHole5th','trailerDir','fifthDir'];
-      const p = {}; keys.forEach(k => p[k] = (k.includes('Dir')? $(k).value : +$(k).value||0));
+      const p = {
+        capSteer: clampNonNeg($('capSteer').value),
+        capDrives: clampNonNeg($('capDrives').value),
+        capTrailer: clampNonNeg($('capTrailer').value),
+        capGross: clampNonNeg($('capGross').value),
+        lbsPerHoleTrailer: clampNonNeg($('lbsPerHoleTrailer').value),
+        lbsPerHole5th: clampNonNeg($('lbsPerHole5th').value),
+        trailerDir: $('trailerDir').value,
+        fifthDir: $('fifthDir').value,
+        bfRound: $('bfRound').value
+      };
       localStorage.setItem('axlePresets', JSON.stringify(p));
-      alert('Presets saved');
+      alert('Presets saved.');
     }
 
+    // Quick caps preset
+    $('capsPreset').addEventListener('change', () => {
+      const v = $('capsPreset').value;
+      if (v === 'std80') {
+        $('capSteer').value = 12000; $('capDrives').value = 34000; $('capTrailer').value = 34000; $('capGross').value = 80000;
+      } else if (v === 'std80_132') {
+        $('capSteer').value = 13200; $('capDrives').value = 34000; $('capTrailer').value = 34000; $('capGross').value = 80000;
+      }
+    });
+
+    // ---------- CAT Scale parser ----------
+    function parseCatText(t){
+      const clean = (t||'').replace(/[, ]+/g,' ').trim();
+      const grab = (label) => {
+        const r = new RegExp(label + "\\D*(\\d{2,3}\\s?\\d{3})","i"); // e.g. 12 340 or 12340
+        const m = clean.match(r);
+        return m ? parseInt(m[1].replace(/\s+/g,''),10) : null;
+      };
+      // common labels
+      const steer = grab("(steer|steers)");
+      const drives = grab("(drive|drives|drive axles)");
+      const trailer = grab("(trailer|tandem|trailer axles)");
+      const gross = grab("(gross|total)");
+      return {steer, drives, trailer, gross};
+    }
+
+    function onParseCat(){
+      const text = $('catPaste').value || '';
+      if(!text.trim()){ $('catOut').textContent = 'Nothing to parse.'; return; }
+      const {steer, drives, trailer, gross} = parseCatText(text);
+      let lines = [];
+      if(steer!=null){ $('steerNow').value = steer; lines.push(`Steer: ${fmt(steer)}`); }
+      if(drives!=null){ $('drivesNow').value = drives; lines.push(`Drives: ${fmt(drives)}`); }
+      if(trailer!=null){ $('trailerNow').value = trailer; lines.push(`Trailer: ${fmt(trailer)}`); }
+      if(gross!=null){ lines.push(`Gross: ${fmt(gross)}`); }
+      $('catOut').textContent = lines.length ? lines.join('\n') : 'Could not find numbers. Try a clearer paste (e.g., Steer 12,140  Drives 33,700  Trailer 32,980  Gross 78,820).';
+    }
+
+    // ---------- Adjustment Planner ----------
     function planAdjustments(){
-      const steer = +$('steerNow').value||0;
-      const drives = +$('drivesNow').value||0;
-      const trailer = +$('trailerNow').value||0;
+      const steer = clampNonNeg($('steerNow').value);
+      const drives = clampNonNeg($('drivesNow').value);
+      const trailer = clampNonNeg($('trailerNow').value);
 
-      const capSteer = +$('capSteer').value||12000;
-      const capDrives = +$('capDrives').value||34000;
-      const capTrailer = +$('capTrailer').value||34000;
-      const capGross = +$('capGross').value||80000;
+      const capSteer = clampNonNeg($('capSteer').value);
+      const capDrives = clampNonNeg($('capDrives').value);
+      const capTrailer = clampNonNeg($('capTrailer').value);
+      const capGross = clampNonNeg($('capGross').value);
 
-      const lbsPerHoleT = Math.max(0, +$('lbsPerHoleTrailer').value||300);
-      const lbsPerHole5 = Math.max(0, +$('lbsPerHole5th').value||500);
+      const lbsPerHoleT = clampNonNeg($('lbsPerHoleTrailer').value);
+      const lbsPerHole5 = clampNonNeg($('lbsPerHole5th').value);
 
-      const trailerDir = $('trailerDir').value;
-      const fifthDir = $('fifthDir').value;
+      const trailerDir = $('trailerDir').value; // "toTrailer" or "toDrives"
+      const fifthDir = $('fifthDir').value;     // "toSteer" or "toDrives"
+
+      if(!steer && !drives && !trailer){
+        $('adjustOut').textContent = 'Enter current axle weights first.';
+        return;
+      }
 
       const gross = steer + drives + trailer;
+      const over = (val, cap) => Math.max(0, val - cap);
+      const room = (val, cap) => Math.max(0, cap - val);
+
       let msg = [];
-      msg.push(`Current: steer=${steer.toLocaleString()}  drives=${drives.toLocaleString()}  trailer=${trailer.toLocaleString()}  gross=${gross.toLocaleString()}`);
+      msg.push(`Current • Steer=${fmt(steer)}  Drives=${fmt(drives)}  Trailer=${fmt(trailer)}  Gross=${fmt(gross)}`);
 
+      // Trailer tandems suggestion (move BACK according to convention)
       let holesTrailer = 0, newDrives = drives, newTrailer = trailer;
-      if(lbsPerHoleT > 0){
-        if(drives > capDrives && trailer < capTrailer && trailerDir === 'toTrailer'){
-          const need = drives - capDrives;
-          const room = capTrailer - trailer;
-          holesTrailer = Math.min(Math.ceil(need/lbsPerHoleT), Math.floor(room/lbsPerHoleT));
-          newDrives -= holesTrailer*lbsPerHoleT;
-          newTrailer += holesTrailer*lbsPerHoleT;
-        } else if(trailer > capTrailer && drives < capDrives && trailerDir === 'toDrives'){
-          const need = trailer - capTrailer;
-          const room = capDrives - drives;
-          holesTrailer = Math.min(Math.ceil(need/lbsPerHoleT), Math.floor(room/lbsPerHoleT));
-          newDrives += holesTrailer*lbsPerHoleT;
-          newTrailer -= holesTrailer*lbsPerHoleT;
-        }
-      }
-      msg.push(holesTrailer>0
-        ? `Trailer tandems: move ${holesTrailer} hole(s) BACK (${trailerDir==='toTrailer'?'adds to trailer':'adds to drives'}).`
-        : `Trailer tandems: no change suggested.`);
 
-      let holes5th = 0, newSteer = steer, adjDrives = newDrives;
-      if(lbsPerHole5 > 0){
-        if(newSteer > capSteer){
-          holes5th = Math.ceil((newSteer - capSteer)/lbsPerHole5);
-          newSteer -= holes5th*lbsPerHole5;
-          adjDrives += holes5th*lbsPerHole5;
-          msg.push(`5th wheel: move ${holes5th} hole(s) BACK (adds to drives) to reduce steer.`);
-        } else if(adjDrives > capDrives && (capSteer - newSteer) > 0){
-          const need = adjDrives - capDrives;
-          const steerRoom = capSteer - newSteer;
-          const holesByNeed = Math.ceil(need/lbsPerHole5);
-          const holesByRoom = Math.floor(steerRoom/lbsPerHole5);
-          holes5th = Math.min(holesByNeed, holesByRoom);
-          if(holes5th>0){
-            newSteer += holes5th*lbsPerHole5;
-            adjDrives -= holes5th*lbsPerHole5;
-            msg.push(`5th wheel: move ${holes5th} hole(s) FORWARD (adds to steer) to reduce drives.`);
-          } else {
-            msg.push(`5th wheel: no safe forward move (steer has no room).`);
+      if(lbsPerHoleT > 0){
+        if(trailerDir === 'toTrailer'){
+          // moving BACK shifts drives -> trailer
+          if(drives > capDrives && trailer < capTrailer){
+            const need = over(drives, capDrives);
+            const canTake = room(trailer, capTrailer);
+            holesTrailer = Math.min(Math.ceil(need / lbsPerHoleT), Math.floor(canTake / lbsPerHoleT));
+            newDrives -= holesTrailer * lbsPerHoleT;
+            newTrailer += holesTrailer * lbsPerHoleT;
           }
         } else {
-          msg.push(`5th wheel: no change suggested.`);
+          // moving BACK shifts trailer -> drives
+          if(trailer > capTrailer && drives < capDrives){
+            const need = over(trailer, capTrailer);
+            const canTake = room(drives, capDrives);
+            holesTrailer = Math.min(Math.ceil(need / lbsPerHoleT), Math.floor(canTake / lbsPerHoleT));
+            newDrives += holesTrailer * lbsPerHoleT;
+            newTrailer -= holesTrailer * lbsPerHoleT;
+          }
+        }
+      }
+
+      if(holesTrailer > 0){
+        const dirWord = trailerDir === "toTrailer" ? "BACK (adds to trailer)" : "BACK (adds to drives)";
+        msg.push(`• Trailer tandems: move ${holesTrailer} hole(s) ${dirWord}.`);
+      }else{
+        msg.push(`• Trailer tandems: no change suggested based on caps/room.`);
+      }
+
+      // 5th wheel suggestion (balance steer vs drives)
+      let holes5th = 0, newSteer = steer, adjDrives = newDrives;
+
+      if(lbsPerHole5 > 0){
+        if(newSteer > capSteer){
+          // reduce steer by moving BACK (adds to drives)
+          const need = over(newSteer, capSteer);
+          const drivesRoom = room(adjDrives, capDrives);
+          holes5th = Math.min(Math.ceil(need / lbsPerHole5), Math.floor(drivesRoom / lbsPerHole5) || Infinity);
+          if(holes5th > 0){
+            newSteer -= holes5th * lbsPerHole5;
+            adjDrives += holes5th * lbsPerHole5;
+            msg.push(`• 5th wheel: move ${holes5th} hole(s) BACK (adds to drives) to reduce steer.`);
+          }
+        } else if(adjDrives > capDrives && room(newSteer, capSteer) > 0 && $('fifthDir').value === 'toSteer'){
+          // move FORWARD to add to steer (if allowed by convention)
+          const need = over(adjDrives, capDrives);
+          const steerRoom = room(newSteer, capSteer);
+          holes5th = Math.min(Math.ceil(need / lbsPerHole5), Math.floor(steerRoom / lbsPerHole5));
+          if(holes5th > 0){
+            newSteer += holes5th * lbsPerHole5;
+            adjDrives -= holes5th * lbsPerHole5;
+            msg.push(`• 5th wheel: move ${holes5th} hole(s) FORWARD (adds to steer) to reduce drives.`);
+          }
+        } else {
+          msg.push(`• 5th wheel: no change suggested.`);
         }
       }
 
@@ -219,54 +346,108 @@
       const finalTrailer = newTrailer;
       const finalGross = finalSteer + finalDrives + finalTrailer;
 
+      // Status
+      const stat = (val, cap, label) => {
+        const diff = cap - val; // positive = room, negative = over
+        const tag = diff >= 0 ? 'OK' : 'OVER';
+        return `${label}: ${fmt(val)} / ${fmt(cap)}  (${tag} ${fmt(Math.abs(diff))})`;
+      };
+
       msg.push('');
-      msg.push(`Projected: steer=${finalSteer.toLocaleString()}  drives=${finalDrives.toLocaleString()}  trailer=${finalTrailer.toLocaleString()}  gross=${finalGross.toLocaleString()}`);
-      msg.push(`Room/Over (+: room, -: over): steer=${(capSteer-finalSteer).toLocaleString()}  drives=${(capDrives-finalDrives).toLocaleString()}  trailer=${(capTrailer-finalTrailer).toLocaleString()}  gross=${(capGross-finalGross).toLocaleString()}`);
+      msg.push('Projected (approx):');
+      msg.push(`• ${stat(finalSteer, capSteer, 'Steer')}`);
+      msg.push(`• ${stat(finalDrives, capDrives, 'Drives')}`);
+      msg.push(`• ${stat(finalTrailer, capTrailer, 'Trailer')}`);
+      msg.push(`• ${stat(finalGross, capGross, 'Gross')}`);
 
       $('adjustOut').textContent = msg.join('\n');
     }
 
+    // ---------- Bridge Formula ----------
+    function updateBFComputedL(){
+      const ft = clampNonNeg($('bfFeet').value);
+      const inch = clampNonNeg($('bfInches').value);
+      const L = ft + (inch/12);
+      $('bfL').value = L ? L.toFixed(2) : '';
+    }
+    $('bfFeet').addEventListener('input', updateBFComputedL);
+    $('bfInches').addEventListener('input', updateBFComputedL);
+
     function calcBridge(){
-      const N = +$('bfN').value||0;
-      const L = +$('bfL').value||0;
-      if(N < 2 || L <= 0){ $('bridgeOut').textContent='Enter N≥2 and L>0.'; return; }
-      let F = 500 * ( (L*N)/(N-1) + 12*N + 36 );
+      const N = clampNonNeg($('bfN').value);
+      const L = +$('bfL').value || 0;
+      if(N < 2 || L <= 0){
+        $('bridgeOut').textContent = 'Enter N ≥ 2 and a positive L (use feet/inches).';
+        return;
+      }
+      let F = 500 * ( (L * N) / (N - 1) + 12 * N + 36 );
+
+      // rounding
       const mode = $('bfRound').value;
-      if(mode==='nearest') F = roundToNearest500(F);
-      if(mode==='down')    F = roundDownTo500(F);
-      const cap = $('bfGrossCap').value==='yes' ? (+$('capGross').value||80000) : Infinity;
-      const Fcapped = Math.min(F, cap);
+      if(mode === 'nearest') F = roundToNearest500(F);
+      if(mode === 'down') F = roundDownTo500(F);
+
+      // cap
+      const grossCapOn = $('bfGrossCap').value === 'yes';
+      const capGross = clampNonNeg($('capGross').value) || 80000;
+      const Fcapped = grossCapOn ? Math.min(F, capGross) : F;
+
       const out = [
-        `Inputs: N=${N}, L=${L} ft`,
-        `Bridge limit (group): ${Math.round(F).toLocaleString()} lbs`,
-        (isFinite(cap)&&F>cap) ? `Applied gross cap: ${cap.toLocaleString()} lbs` : null,
-        `Allowed weight: ${Math.round(Fcapped).toLocaleString()} lbs`
+        `Inputs: N=${N}, L=${(+L).toFixed(2)} ft`,
+        `Bridge limit (group): ${fmt(Math.round(F))} lbs`,
+        (grossCapOn && F > capGross) ? `Applied gross cap: ${fmt(capGross)} lbs` : null,
+        `Allowed weight: ${fmt(Math.round(Fcapped))} lbs`
       ].filter(Boolean).join('\n');
+
       $('bridgeOut').textContent = out;
     }
 
+    // ---------- Quick summary & sharing ----------
     function quickLegal(){
-      const s=+$('steerNow').value||0,d=+$('drivesNow').value||0,t=+$('trailerNow').value||0,g=s+d+t;
-      const cs=+$('capSteer').value||12000, cd=+$('capDrives').value||34000, ct=+$('capTrailer').value||34000, cg=+$('capGross').value||80000;
-      alert(`Legal check:\nSteer ${s}/${cs} = ${s-cs}\nDrives ${d}/${cd} = ${d-cd}\nTrailer ${t}/${ct} = ${t-ct}\nGross ${g}/${cg} = ${g-cg}`);
-    }
-    async function shareData(){
-      const text = `Axle Plan\n${$('adjustOut').textContent}\n\nBridge\n${$('bridgeOut').textContent}`;
-      if(navigator.share){ try{ await navigator.share({title:'Axle Plan', text}); }catch(_){} }
-      else { await navigator.clipboard.writeText(text); alert('Copied to clipboard'); }
+      const s = clampNonNeg($('steerNow').value), d = clampNonNeg($('drivesNow').value), t = clampNonNeg($('trailerNow').value);
+      const g = s + d + t;
+      const cs = clampNonNeg($('capSteer').value), cd = clampNonNeg($('capDrives').value),
+            ct = clampNonNeg($('capTrailer').value), cg = clampNonNeg($('capGross').value);
+
+      const line = (name, val, cap) => `${name}: ${fmt(val)} / ${fmt(cap)}  (${val <= cap ? 'OK' : 'OVER ' + fmt(val-cap)})`;
+      alert(`Legal check:\n${line('Steer',s,cs)}\n${line('Drives',d,cd)}\n${line('Trailer',t,ct)}\n${line('Gross',g,cg)}`);
     }
 
+    async function shareData(){
+      const text =
+`WeighRight -- Axle Plan
+${$('adjustOut').textContent}
+
+Bridge
+${$('bridgeOut').textContent}`;
+      try{
+        if(navigator.share){ await navigator.share({title:'WeighRight Plan', text}); }
+        else { await navigator.clipboard.writeText(text); alert('Copied to clipboard'); }
+      }catch(e){}
+    }
+
+    // ---------- Events ----------
     $('savePresets').addEventListener('click', savePresets);
+    $('parseCat').addEventListener('click', onParseCat);
+    $('clearCat').addEventListener('click', ()=>{ $('catPaste').value=''; $('catOut').textContent=''; });
+
     $('calcAdjust').addEventListener('click', planAdjustments);
-    $('clearAdjust').addEventListener('click', ()=>{$('adjustOut').textContent=''; ['steerNow','drivesNow','trailerNow'].forEach(id=>$(id).value='');});
+    $('clearAdjust').addEventListener('click', ()=>{
+      $('adjustOut').textContent='';
+      ['steerNow','drivesNow','trailerNow'].forEach(id=>$(id).value='');
+    });
     $('quickLegal').addEventListener('click', quickLegal);
     $('shareBtn').addEventListener('click', shareData);
 
     $('calcBridge').addEventListener('click', calcBridge);
-    $('clearBridge').addEventListener('click', ()=>{$('bridgeOut').textContent=''; $('bfL').value='';});
+    $('clearBridge').addEventListener('click', ()=>{ $('bridgeOut').textContent=''; $('bfFeet').value=''; $('bfInches').value=''; $('bfL').value=''; });
 
-    $('resetBtn').addEventListener('click', ()=>{ localStorage.removeItem('axlePresets'); location.reload(); });
+    $('resetBtn').addEventListener('click', ()=>{
+      localStorage.removeItem('axlePresets');
+      location.reload();
+    });
 
+    // Boot
     loadPresets();
   </script>
 </body>
